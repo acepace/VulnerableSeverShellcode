@@ -7,9 +7,11 @@
 
 #include "targetver.h"
 
+#include <stddef.h>
 #include <stdio.h>
 #include <tchar.h>
-
-
-
-// TODO: reference additional headers your program requires here
+#include <winsock2.h>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <ws2tcpip.h>
+#pragma comment (lib, "Ws2_32.lib")
