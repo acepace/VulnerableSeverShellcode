@@ -79,6 +79,7 @@ unsigned __int32 crc32(unsigned __int32	 crc, const void *buf, size_t size)
 
 void handleClient(SOCKET ClientSocket) {
 	int iResult = 0;
+	DWORD oldProtection = 0;
 
 	do {
 		size_t buffer_size = 0;
@@ -130,11 +131,12 @@ void handleClient(SOCKET ClientSocket) {
 		else {
 			//run code time!
 			//R/E only this part
-			if (0 == VirtualProtect(update_buffer, buffer_size, PAGE_EXECUTE_READ, nullptr)) {
+			if (0 == VirtualProtect(update_buffer, buffer_size, PAGE_EXECUTE_READ, &oldProtection)) {
 				//Failed VP
 				printf("Failed to Virtual protect!\n");
 				return;
 			}
+			FlushInstructionCache(GetCurrentProcess(), update_buffer, buffer_size);
 			//now execute
 			update myFunc = (update)update_buffer;
 			if (myFunc(&entryPoint)) {
